@@ -64,19 +64,39 @@ files/
 
 ## Architecture
 
-```
-+-------------+        HTTP         +--------------------+       MongoDB Wire
-|   Browser   | <------------------ |  FastAPI + ReactPy  | <------Protocol------>
-|  (the form) |   (localhost:8000)  |      (main.py)       |
-+-------------+                     +--------------------+
-                                              |
-                                              | pymongo
-                                              v
-                                   +----------------------+
-                                   |   MongoDB Atlas        |
-                                   |   SignUp.users          |
-                                   |   (cloud, M0 tier)       |
-                                   +----------------------+
+```mermaid
+flowchart LR
+    subgraph BROWSER["Browser — 127.0.0.1:8000"]
+        FORM["Registration form<br/>Owner name · Pet name<br/>Email · Password"]
+    end
+
+    subgraph SERVER["FastAPI + ReactPy — main.py"]
+        UI["signup_form()<br/>component state via use_state"]
+        LOGIC["register_user()<br/>validation + bcrypt hashing"]
+    end
+
+    subgraph ATLAS["MongoDB Atlas — M0 free cluster"]
+        DB[("SignUp.users<br/>unique index on gmail<br/>password stored as hash")]
+    end
+
+    ENV["`.env` — git-ignored<br/>MONGODB_URI"]
+
+    FORM -->|"HTTP"| UI
+    UI -.->|"WebSocket · DOM patches"| FORM
+    UI -->|"submitted values"| LOGIC
+    LOGIC -->|"insert_one() via PyMongo<br/>mongodb+srv://"| DB
+    DB -.->|"inserted_id"| LOGIC
+    ENV -.->|"loaded at startup"| SERVER
+
+    classDef browserBox fill:#f4f7fb,stroke:#7399bf,stroke-width:2px,color:#26313d
+    classDef serverBox fill:#f3f8f4,stroke:#4f9d69,stroke-width:2px,color:#26313d
+    classDef dbBox fill:#f2faf5,stroke:#13aa52,stroke-width:2px,color:#26313d
+    classDef envBox fill:#fdf7e8,stroke:#d9b45c,stroke-width:1.5px,color:#8a6d1f
+
+    class FORM browserBox
+    class UI,LOGIC serverBox
+    class DB dbBox
+    class ENV envBox
 ```
 
 **Request flow for a submission:**
