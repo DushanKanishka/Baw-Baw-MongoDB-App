@@ -63,35 +63,43 @@ files/
 | `.env` | Holds `MONGODB_URI`, `DB_NAME`, `COLLECTION_NAME` — read at runtime with `os.getenv()`, never hardcoded in the Python files. |
 
 ## Architecture
-
 ```mermaid
-flowchart LR
-    subgraph BROWSER["Browser (127.0.0.1:8000)"]
-        FORM["Registration form<br/>Owner name, Pet name<br/>Email, Password"]
+%%{init: {'theme':'base', 'themeVariables': {
+  'fontSize':'20px',
+  'fontFamily':'Segoe UI, Helvetica, Arial, sans-serif',
+  'background':'#ffffff',
+  'primaryTextColor':'#26313d',
+  'lineColor':'#5b7fa6',
+  'clusterBkg':'#ffffff',
+  'clusterBorder':'#c9d4de'
+}}}%%
+flowchart TB
+    subgraph BROWSER["🌐 Browser (127.0.0.1:8000)"]
+        FORM["<b>Registration form</b><br/>Owner name, Pet name<br/>Email, Password"]
     end
 
-    subgraph SERVER["FastAPI + ReactPy (main.py)"]
-        UI["signup_form()<br/>component state via use_state"]
-        LOGIC["register_user()<br/>validation + bcrypt hashing"]
+    subgraph SERVER["⚙️ FastAPI + ReactPy (main.py)"]
+        UI["<b>signup_form()</b><br/>component state via use_state"]
+        LOGIC["<b>register_user()</b><br/>validation + bcrypt hashing"]
     end
 
-    subgraph ATLAS["MongoDB Atlas (M0 free cluster)"]
-        DB[("SignUp.users<br/>unique index on gmail<br/>password stored as hash")]
+    subgraph ATLAS["🍃 MongoDB Atlas (M0 free cluster)"]
+        DB[("<b>SignUp.users</b><br/>unique index on gmail<br/>password stored as hash")]
     end
 
-    ENV["dotenv file (git-ignored)<br/>MONGODB_URI"]
+    ENV["<b>dotenv file</b> (git-ignored)<br/>MONGODB_URI"]
 
-    FORM -->|"HTTP"| UI
+    FORM ==>|"HTTP"| UI
     UI -.->|"WebSocket, DOM patches"| FORM
-    UI -->|"submitted values"| LOGIC
-    LOGIC -->|"insert_one via PyMongo"| DB
+    UI ==>|"submitted values"| LOGIC
+    LOGIC ==>|"insert_one via PyMongo"| DB
     DB -.->|"inserted_id"| LOGIC
     ENV -.->|"loaded at startup"| LOGIC
 
-    classDef browserBox fill:#f4f7fb,stroke:#7399bf,stroke-width:2px,color:#26313d
-    classDef serverBox fill:#f3f8f4,stroke:#4f9d69,stroke-width:2px,color:#26313d
-    classDef dbBox fill:#f2faf5,stroke:#13aa52,stroke-width:2px,color:#26313d
-    classDef envBox fill:#fdf7e8,stroke:#d9b45c,stroke-width:1.5px,color:#8a6d1f
+    classDef browserBox fill:#eaf1f9,stroke:#5b7fa6,stroke-width:3px,color:#1d2a36
+    classDef serverBox fill:#e7f4ec,stroke:#3d8a58,stroke-width:3px,color:#1d2a36
+    classDef dbBox fill:#e3f7ec,stroke:#13aa52,stroke-width:3px,color:#1d2a36
+    classDef envBox fill:#fdf3dc,stroke:#c99f3f,stroke-width:2px,color:#6b5518
 
     class FORM browserBox
     class UI,LOGIC serverBox
