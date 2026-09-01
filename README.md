@@ -63,49 +63,8 @@ files/
 | `.env` | Holds `MONGODB_URI`, `DB_NAME`, `COLLECTION_NAME` — read at runtime with `os.getenv()`, never hardcoded in the Python files. |
 
 ## Architecture
-```mermaid
-%%{init: {'theme':'base', 'themeVariables': {
-  'fontSize':'20px',
-  'fontFamily':'Segoe UI, Helvetica, Arial, sans-serif',
-  'background':'#ffffff',
-  'primaryTextColor':'#26313d',
-  'lineColor':'#5b7fa6',
-  'clusterBkg':'#ffffff',
-  'clusterBorder':'#c9d4de'
-}}}%%
-flowchart TB
-    subgraph BROWSER["🌐 Browser (127.0.0.1:8000)"]
-        FORM["<b>Registration form</b><br/>Owner name, Pet name<br/>Email, Password"]
-    end
 
-    subgraph SERVER["⚙️ FastAPI + ReactPy (main.py)"]
-        UI["<b>signup_form()</b><br/>component state via use_state"]
-        LOGIC["<b>register_user()</b><br/>validation + bcrypt hashing"]
-    end
-
-    subgraph ATLAS["🍃 MongoDB Atlas (M0 free cluster)"]
-        DB[("<b>SignUp.users</b><br/>unique index on gmail<br/>password stored as hash")]
-    end
-
-    ENV["<b>dotenv file</b> (git-ignored)<br/>MONGODB_URI"]
-
-    FORM ==>|"HTTP"| UI
-    UI -.->|"WebSocket, DOM patches"| FORM
-    UI ==>|"submitted values"| LOGIC
-    LOGIC ==>|"insert_one via PyMongo"| DB
-    DB -.->|"inserted_id"| LOGIC
-    ENV -.->|"loaded at startup"| LOGIC
-
-    classDef browserBox fill:#eaf1f9,stroke:#5b7fa6,stroke-width:3px,color:#1d2a36
-    classDef serverBox fill:#e7f4ec,stroke:#3d8a58,stroke-width:3px,color:#1d2a36
-    classDef dbBox fill:#e3f7ec,stroke:#13aa52,stroke-width:3px,color:#1d2a36
-    classDef envBox fill:#fdf3dc,stroke:#c99f3f,stroke-width:2px,color:#6b5518
-
-    class FORM browserBox
-    class UI,LOGIC serverBox
-    class DB dbBox
-    class ENV envBox
-```
+![Architecture](assets/architecture-tb.png)
 
 **Request flow for a submission:**
 1. ReactPy tracks each input's value in component state (`use_state`).
