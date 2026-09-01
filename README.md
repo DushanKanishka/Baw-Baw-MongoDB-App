@@ -8,20 +8,11 @@ connected to a cloud NoSQL database.
 
 ## Demo
 
-<!--
-Record a short screen capture (60-90 seconds is enough) showing:
-  1. The form loading in the browser
-  2. Filling it in and submitting
-  3. The terminal printing the inserted document ID
-  4. The new document appearing in MongoDB Compass or Atlas
 
-Upload it to YouTube (Unlisted is fine) and swap the line below for:
-[![Demo video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://youtu.be/YOUR_VIDEO_ID)
 
-Or record a short GIF (using ScreenToGif or similar), drag it into a GitHub
-issue/PR comment to get an uploaded URL, then embed it directly:
-![Demo](https://github.com/user-attachments/assets/your-gif-url.gif)
--->
+Uploading Demo2.mp4…
+
+
 
 *Video link goes here once recorded.*
 
