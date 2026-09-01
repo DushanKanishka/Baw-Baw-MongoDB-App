@@ -10,11 +10,10 @@ connected to a cloud NoSQL database.
 
 
 
-Uploading Demo2.mp4…
+
+https://github.com/user-attachments/assets/6e25d8d0-13f2-4f5b-9d6d-2b9b0719ce60
 
 
-
-*Video link goes here once recorded.*
 
 ## Overview
 
