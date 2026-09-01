@@ -66,27 +66,27 @@ files/
 
 ```mermaid
 flowchart LR
-    subgraph BROWSER["Browser — 127.0.0.1:8000"]
-        FORM["Registration form<br/>Owner name · Pet name<br/>Email · Password"]
+    subgraph BROWSER["Browser (127.0.0.1:8000)"]
+        FORM["Registration form<br/>Owner name, Pet name<br/>Email, Password"]
     end
 
-    subgraph SERVER["FastAPI + ReactPy — main.py"]
+    subgraph SERVER["FastAPI + ReactPy (main.py)"]
         UI["signup_form()<br/>component state via use_state"]
         LOGIC["register_user()<br/>validation + bcrypt hashing"]
     end
 
-    subgraph ATLAS["MongoDB Atlas — M0 free cluster"]
+    subgraph ATLAS["MongoDB Atlas (M0 free cluster)"]
         DB[("SignUp.users<br/>unique index on gmail<br/>password stored as hash")]
     end
 
-    ENV["`.env` — git-ignored<br/>MONGODB_URI"]
+    ENV["dotenv file (git-ignored)<br/>MONGODB_URI"]
 
     FORM -->|"HTTP"| UI
-    UI -.->|"WebSocket · DOM patches"| FORM
+    UI -.->|"WebSocket, DOM patches"| FORM
     UI -->|"submitted values"| LOGIC
-    LOGIC -->|"insert_one() via PyMongo<br/>mongodb+srv://"| DB
+    LOGIC -->|"insert_one via PyMongo"| DB
     DB -.->|"inserted_id"| LOGIC
-    ENV -.->|"loaded at startup"| SERVER
+    ENV -.->|"loaded at startup"| LOGIC
 
     classDef browserBox fill:#f4f7fb,stroke:#7399bf,stroke-width:2px,color:#26313d
     classDef serverBox fill:#f3f8f4,stroke:#4f9d69,stroke-width:2px,color:#26313d
